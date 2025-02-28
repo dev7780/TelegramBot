@@ -28,8 +28,10 @@ bot.on('message', (msg) => {
   const chatId = msg.chat.id;
   const text = msg.text;
 
+  if (text.startsWith('/')) return;
+
   if (text === "💎 Claim Deposit Offer 💎") {
-    bot.sendMessage(chatId, "🎉 Offer Claimed! Our team will contact you shortly.");
+    bot.sendMessage(chatId, "Sorry, there is no active raffle at the moment!");
   }
   if (text === "🎟️ Raffle 🎟️") {
     bot.sendMessage(chatId, "Sorry, there is no active raffle at the moment!");
