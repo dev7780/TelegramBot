@@ -31,7 +31,9 @@ bot.on('message', (msg) => {
   if (text.startsWith('/')) return;
 
   if (text === "💎 Claim Deposit Offer 💎") {
-    bot.sendMessage(chatId, "Sorry, there is no active raffle at the moment!");
+    bot.sendPhoto(chatId, "public/pic.jpg");
+    bot.sendMessage(chatId, "🚨 Bonus Drop Alert 🚨\n\nAs promised, would give you a HUGE drop! 🎁\n\nIt's officially the month of good! Here's another offer boost to show how much we love our amazing players!\nNote: both new AND existing users may claim these offers\n\n💎 300% match up to $300.000\n🚫 No Wager Requirements\n📅 Expires Feb 28st at 11:59PM UTC\n\n🚀 Users who claim and deposit $10,000 or more will receive the benefit of an exclusive VIP Host and personalized bonuses for 7 calendar days!\nIf you already have a VIP Host, you'll receive an additional 50% deposit match instead.\n\nClick Claim Deposit Offer for more details");
+    
   }
   if (text === "🎟️ Raffle 🎟️") {
     bot.sendMessage(chatId, "Sorry, there is no active raffle at the moment!");
