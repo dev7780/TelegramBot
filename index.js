@@ -22,6 +22,13 @@ bot.onText(/\/start/, (msg) => {
   });
 });
 
+bot.onText(/\/Complete/, (msg) => {
+  bot.sendMessage(
+    msg.chat.id,
+    "After you click this button, your offer claim will be complete and your account will be credited after the confirmation is reached.✅"
+  );
+});
+
 // Handle button presses
 bot.on('message', (msg) => {
   const chatId = msg.chat.id;
