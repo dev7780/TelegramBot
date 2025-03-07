@@ -7,5 +7,9 @@
   },
   "dependencies": {
     "node-telegram-bot-api": "^0.66.0"
-  }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }
